@@ -1,0 +1,9 @@
+{
+   "title": "The title",
+   "description":"the Description is blablabla",
+   "price":100,
+   "currency":"Canadian",
+   "is_active":true,
+   "city":"Bangkok",
+   "country":"Thailand"
+}

@@ -3,21 +3,39 @@ require 'rails_helper'
 RSpec.describe Api::V1::AvailabilitiesController, :type => :controller do
 
   describe "GET index" do
-    it "returns all availabilities" do
-      activity = FactoryGirl.create(:activity)
-      data = FactoryGirl.create(:availability, activity: activity)
-      # availability_2 = FactoryGirl.create(:availability, activity: activity)
+    # it "returns all activity availabilities" do
+    #
+    #   activity1 = FactoryGirl.create(:activity)
+    #   activity2 = FactoryGirl.create(:activity)
+    #   a1 = FactoryGirl.create(:availability, activity: activity1)
+    #   a2 = FactoryGirl.create(:availability, activity: activity1)
+    #   a3 = FactoryGirl.create(:availability, activity: activity2)
+    #
+    #   data = {}
+    #   data[:format] = "json"
+    #   data[:activity_id] = activity1.id
+    #
+    #   get :index, data
+    #   expect(response.status).to eq 200
+    #   expect(ActiveSupport::JSON.decode(response.body)['availabilities'].count).to eq 2
+    # end
 
-      data = {
-        :format => "json"
-      }
+    it "returns all availabilities" do
+      activity1 = FactoryGirl.create(:activity)
+      activity2 = FactoryGirl.create(:activity)
+      a1 = FactoryGirl.create(:availability, activity: activity1)
+      a2 = FactoryGirl.create(:availability, activity: activity1)
+      a3 = FactoryGirl.create(:availability, activity: activity2)
+
+      data = {}
+      data[:format] = "json"
 
       get :index, data
       expect(response.status).to eq 200
-      expect(ActiveSupport::JSON.decode(response.body).count).to eq 1
+      expect(ActiveSupport::JSON.decode(response.body)['availabilities'].count).to eq 3
+
     end
   end
-
 
   describe "GET show" do
     it "shows activity availability" do
@@ -56,39 +74,41 @@ RSpec.describe Api::V1::AvailabilitiesController, :type => :controller do
 
   describe "PUT update" do
     it "updates the availability attributes" do
-      currency1 = "Canadian"
-      availability = FactoryGirl.create(:availability, currency: "USD")
+
+
+      activity =  FactoryGirl.create(:activity)
+      availability = FactoryGirl.create(:availability,activity: activity )
 
       data = {}
       data[:id] = availability.id
-      data[:currency] = currency1
+      data[:currency] = "USD"
       data[:format] = "json"
 
       put :update, data
       expect(response.code).to eq("204")
 
       availability.reload
-      expect(availability.currency).to eq(currency1)
+      expect(availability.currency).to eq("USD")
 
     end
   end
 
   describe "DELETE destroy" do
     it "deletes the availability" do
-      availability = FactoryGirl.create(:availability)
+      activity = FactoryGirl.create(:activity)
+      availability = FactoryGirl.create(:availability, activity: activity)
+
       data = {
         :format => "json",
         :id => availability.id
-          }
+      }
 
       expect {
           delete :destroy, data
-        }.to change(Availability, :count).by(-1)
+      }.to change(Availability, :count).by(-1)
 
       expect(response.status).to eq 204
     end
   end
-
-
 
 end

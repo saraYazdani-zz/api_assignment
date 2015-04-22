@@ -4,11 +4,15 @@ module Api
       respond_to :json
 
       def index
-         @availabilities = Availability.includes(:activity)
-         @availabilities.all
-         respond_with @availabilities
-      end
+        activity_id = params[:activity_id]
+        if activity_id
+          @availabilities = Availability.where("activity_id = #{activity_id}").all
+        else
+          @availabilities = Availability.all
+        end
+        respond_with @availabilities
 
+      end
 
       def show
         @availability = Availability.find(params[:id])
@@ -16,18 +20,15 @@ module Api
       end
 
       def create
-        @availability = Availability.new(get_secure_params_forcreate)
-        @availability.save!
+        @availability = Availability.new(get_secure_params_for_create)
+        @availability.save
         respond_with @availability, :location => polymorphic_url([:api, :v1, @availability])
-
       end
 
       def update
-
         @availability = Availability.find(params[:id])
-        @availability.update!(get_secure_params_forcreate)
+        @availability.update(get_secure_params_for_create)
         respond_with @availability
-
       end
 
       def destroy
@@ -37,7 +38,7 @@ module Api
       end
 
       private
-        def get_secure_params_forcreate
+        def get_secure_params_for_create
           params.permit(:activity_id, :starts_at, :price, :currency)
         end
     end

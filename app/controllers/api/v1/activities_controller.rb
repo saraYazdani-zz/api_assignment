@@ -16,13 +16,13 @@ module Api
 
       def create
         @activity = Activity.new(get_secure_params)
-        @activity.save!
+        @activity.save
         respond_with @activity, :location => polymorphic_url([:api, :v1, @activity])
       end
 
       def update
         @activity = Activity.find(params[:id])
-        @activity.update!(get_secure_params)
+        @activity.update(get_secure_params)
         respond_with @activity
       end
 

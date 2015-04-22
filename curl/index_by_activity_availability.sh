@@ -3,4 +3,4 @@
  curl -i \
  -H "Content-Type: application/json" \
  -X GET \
- http://localhost:3000/api/v1/availabilities \
+ http://localhost:3000/api/v1/availabilities?activity_id=2 \

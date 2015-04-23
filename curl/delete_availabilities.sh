@@ -3,7 +3,7 @@
  curl -i \
  -H "Content-Type: application/json" \
  -X DELETE \
- http://localhost:3000/api/v1/availabilities/6
+ http://localhost:3000/api/v1/availabilities/45
 
 
 

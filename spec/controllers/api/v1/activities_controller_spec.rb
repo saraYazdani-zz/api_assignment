@@ -80,6 +80,22 @@ describe Api::V1::ActivitiesController, :type => :controller do
 
       expect(response.status).to eq 204
     end
+
+    it "  it does not delete the activity associated with availabilities" do
+      activity = FactoryGirl.create(:activity)
+      availability = FactoryGirl.create(:availability, activity: activity)
+
+      data = {
+          :format => "json",
+          :id => activity.id
+      }
+      expect{
+       delete :destroy, data
+      }.to change(Activity, :count).by(0)
+      expect(response.status).to eq 422
+
+
+    end
   end
 
 end
